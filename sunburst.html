@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Population Sunburst (2025)</title>
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    #sunburst {
+      width: 100vw;
+      height: 100vh;
+      max-width: 100%;
+      max-height: 100%;
+    }
+   #back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #333; /* gris neutro oscuro */
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      opacity: 0.9;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: background 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+      z-index: 100;
+    }
+
+    #back-btn:hover {
+      background-color: #222;
+      opacity: 1;
+      transform: scale(1.02);
+    }
+
+    #back-btn:focus {
+      outline: 3px solid #FFD43B;
+      outline-offset: 2px;
+    }
+
+    #back-btn:active {
+      transform: scale(0.98);
+    }
+    </style>
+</head>
+<body style="margin:0; display:flex; justify-content:center; align-items:center; height:100vh; background:#f8f9fa;">
+  <button id="back-btn" onclick="window.location.href='index.html'">← Back to Index</button>
+  <div id="sunburst"></div>
+
+  <script>
+    const rows = [
+      {
+        "Continent": "Asia",
+        "Subregion": "Southern Asia",
+        "Country": "India",
+        "Population_2025": 1463865525
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Eastern Asia",
+        "Country": "China",
+        "Population_2025": 1416096094
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Northern America",
+        "Country": "United States",
+        "Population_2025": 347275807
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Indonesia",
+        "Population_2025": 285721236
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Southern Asia",
+        "Country": "Pakistan",
+        "Population_2025": 255219554
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Nigeria",
+        "Population_2025": 237527782
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Brazil",
+        "Population_2025": 212812405
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Southern Asia",
+        "Country": "Bangladesh",
+        "Population_2025": 175686899
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Eastern Europe",
+        "Country": "Russia",
+        "Population_2025": 143997393
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Ethiopia",
+        "Population_2025": 135472051
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Northern America",
+        "Country": "Mexico",
+        "Population_2025": 131946900
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Eastern Asia",
+        "Country": "Japan",
+        "Population_2025": 123103479
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Northern Africa",
+        "Country": "Egypt",
+        "Population_2025": 118365995
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Philippines",
+        "Population_2025": 116786962
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Central Africa",
+        "Country": "DR Congo",
+        "Population_2025": 112832473
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Vietnam",
+        "Population_2025": 101598527
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Iran",
+        "Population_2025": 92417681
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Turkey",
+        "Population_2025": 87685426
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "Germany",
+        "Population_2025": 84075075
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Thailand",
+        "Population_2025": 71619863
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Tanzania",
+        "Population_2025": 70545865
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "United Kingdom",
+        "Population_2025": 69551332
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "France",
+        "Population_2025": 66650804
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Southern Africa",
+        "Country": "South Africa",
+        "Population_2025": 64747319
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Italy",
+        "Population_2025": 59146260
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Kenya",
+        "Population_2025": 57532493
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Myanmar",
+        "Population_2025": 54850648
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Colombia",
+        "Population_2025": 53425635
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Eastern Asia",
+        "Country": "South Korea",
+        "Population_2025": 51667029
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Northern Africa",
+        "Country": "Sudan",
+        "Population_2025": 51662147
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Uganda",
+        "Population_2025": 51384894
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Spain",
+        "Population_2025": 47889958
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Northern Africa",
+        "Country": "Algeria",
+        "Population_2025": 47435312
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Iraq",
+        "Population_2025": 47020774
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Argentina",
+        "Population_2025": 45851378
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Southern Asia",
+        "Country": "Afghanistan",
+        "Population_2025": 43844111
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Yemen",
+        "Population_2025": 41773878
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Northern America",
+        "Country": "Canada",
+        "Population_2025": 40126723
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Central Africa",
+        "Country": "Angola",
+        "Population_2025": 39040039
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Eastern Europe",
+        "Country": "Ukraine",
+        "Population_2025": 38980376
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Northern Africa",
+        "Country": "Morocco",
+        "Population_2025": 38430770
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Eastern Europe",
+        "Country": "Poland",
+        "Population_2025": 38140910
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Central Asia",
+        "Country": "Uzbekistan",
+        "Population_2025": 37053428
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Malaysia",
+        "Population_2025": 35977838
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Mozambique",
+        "Population_2025": 35631653
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Ghana",
+        "Population_2025": 35064272
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Peru",
+        "Population_2025": 34576665
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Saudi Arabia",
+        "Population_2025": 34566328
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Madagascar",
+        "Population_2025": 32740678
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Côte d'Ivoire",
+        "Population_2025": 32711547
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Central Africa",
+        "Country": "Cameroon",
+        "Population_2025": 29879337
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Southern Asia",
+        "Country": "Nepal",
+        "Population_2025": 29618118
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Venezuela",
+        "Population_2025": 28516896
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Niger",
+        "Population_2025": 27917831
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Australia and New Zealand",
+        "Country": "Australia",
+        "Population_2025": 26974026
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Eastern Asia",
+        "Country": "North Korea",
+        "Population_2025": 26571036
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Syria",
+        "Population_2025": 25620427
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Mali",
+        "Population_2025": 25198821
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Burkina Faso",
+        "Population_2025": 24074580
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Southern Asia",
+        "Country": "Sri Lanka",
+        "Population_2025": 23229470
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Eastern Asia",
+        "Country": "Taiwan",
+        "Population_2025": 23112793
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Malawi",
+        "Population_2025": 22216120
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Zambia",
+        "Population_2025": 21913874
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Central Africa",
+        "Country": "Chad",
+        "Population_2025": 21003705
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Central Asia",
+        "Country": "Kazakhstan",
+        "Population_2025": 20843754
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Chile",
+        "Population_2025": 19859921
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Somalia",
+        "Population_2025": 19654739
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Senegal",
+        "Population_2025": 18931966
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Eastern Europe",
+        "Country": "Romania",
+        "Population_2025": 18908650
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Central America",
+        "Country": "Guatemala",
+        "Population_2025": 18687881
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "Netherlands",
+        "Population_2025": 18346819
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Ecuador",
+        "Population_2025": 18289896
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Cambodia",
+        "Population_2025": 17847982
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Zimbabwe",
+        "Population_2025": 16950795
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Guinea",
+        "Population_2025": 15099727
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Benin",
+        "Population_2025": 14814460
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Rwanda",
+        "Population_2025": 14569341
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Burundi",
+        "Population_2025": 14390003
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Bolivia",
+        "Population_2025": 12581843
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Northern Africa",
+        "Country": "Tunisia",
+        "Population_2025": 12348573
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "South Sudan",
+        "Population_2025": 12188788
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Haiti",
+        "Population_2025": 11906095
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "Belgium",
+        "Population_2025": 11758603
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Jordan",
+        "Population_2025": 11520684
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Dominican Republic",
+        "Population_2025": 11520487
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "United Arab Emirates",
+        "Population_2025": 11346000
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Central America",
+        "Country": "Honduras",
+        "Population_2025": 11005850
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Cuba",
+        "Population_2025": 10937203
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Central Asia",
+        "Country": "Tajikistan",
+        "Population_2025": 10786734
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Melanesia",
+        "Country": "Papua New Guinea",
+        "Population_2025": 10762817
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Sweden",
+        "Population_2025": 10656633
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Eastern Europe",
+        "Country": "Czech Republic (Czechia)",
+        "Population_2025": 10609239
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Portugal",
+        "Population_2025": 10411834
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Azerbaijan",
+        "Population_2025": 10397713
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Greece",
+        "Population_2025": 9938844
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Togo",
+        "Population_2025": 9721608
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Eastern Europe",
+        "Country": "Hungary",
+        "Population_2025": 9632287
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Israel",
+        "Population_2025": 9517181
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "Austria",
+        "Population_2025": 9113574
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "Belarus",
+        "Population_2025": 8997603
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "Switzerland",
+        "Population_2025": 8967407
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Sierra Leone",
+        "Population_2025": 8819794
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Laos",
+        "Population_2025": 7873046
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Central Asia",
+        "Country": "Turkmenistan",
+        "Population_2025": 7618847
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Northern Africa",
+        "Country": "Libya",
+        "Population_2025": 7458555
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Eastern Asia",
+        "Country": "Hong Kong",
+        "Population_2025": 7396076
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Central Asia",
+        "Country": "Kyrgyzstan",
+        "Population_2025": 7295034
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Paraguay",
+        "Population_2025": 7013078
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Central America",
+        "Country": "Nicaragua",
+        "Population_2025": 7007502
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Eastern Europe",
+        "Country": "Bulgaria",
+        "Population_2025": 6714560
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Serbia",
+        "Population_2025": 6689039
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Central Africa",
+        "Country": "Congo",
+        "Population_2025": 6484437
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Central America",
+        "Country": "El Salvador",
+        "Population_2025": 6365503
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Denmark",
+        "Population_2025": 6002507
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Singapore",
+        "Population_2025": 5870750
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Lebanon",
+        "Population_2025": 5849421
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Liberia",
+        "Population_2025": 5731206
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Finland",
+        "Population_2025": 5623329
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Norway",
+        "Population_2025": 5623071
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "State of Palestine",
+        "Population_2025": 5589623
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Central Africa",
+        "Country": "Central African Republic",
+        "Population_2025": 5513282
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Oman",
+        "Population_2025": 5494691
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Eastern Europe",
+        "Country": "Slovakia",
+        "Population_2025": 5474881
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Mauritania",
+        "Population_2025": 5315065
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Ireland",
+        "Population_2025": 5308039
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Australia and New Zealand",
+        "Country": "New Zealand",
+        "Population_2025": 5251899
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Central America",
+        "Country": "Costa Rica",
+        "Population_2025": 5152950
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Kuwait",
+        "Population_2025": 5026078
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Central America",
+        "Country": "Panama",
+        "Population_2025": 4571189
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Croatia",
+        "Population_2025": 3848160
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Georgia",
+        "Population_2025": 3806671
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Eritrea",
+        "Population_2025": 3607003
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Eastern Asia",
+        "Country": "Mongolia",
+        "Population_2025": 3517100
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Uruguay",
+        "Population_2025": 3384688
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Puerto Rico",
+        "Population_2025": 3235289
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Bosnia and Herzegovina",
+        "Population_2025": 3140095
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Qatar",
+        "Population_2025": 3115889
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Southern Africa",
+        "Country": "Namibia",
+        "Population_2025": 3092816
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Eastern Europe",
+        "Country": "Moldova",
+        "Population_2025": 2996106
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Armenia",
+        "Population_2025": 2952365
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Jamaica",
+        "Population_2025": 2837077
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Lithuania",
+        "Population_2025": 2830144
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Gambia",
+        "Population_2025": 2822093
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Albania",
+        "Population_2025": 2771508
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Central Africa",
+        "Country": "Gabon",
+        "Population_2025": 2593130
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Southern Africa",
+        "Country": "Botswana",
+        "Population_2025": 2562122
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Southern Africa",
+        "Country": "Lesotho",
+        "Population_2025": 2363325
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Guinea-Bissau",
+        "Population_2025": 2249515
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Slovenia",
+        "Population_2025": 2117072
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Central Africa",
+        "Country": "Equatorial Guinea",
+        "Population_2025": 1938431
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Latvia",
+        "Population_2025": 1853559
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "North Macedonia",
+        "Population_2025": 1813791
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Western Asia",
+        "Country": "Bahrain",
+        "Population_2025": 1643332
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Trinidad and Tobago",
+        "Population_2025": 1511155
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Timor-Leste",
+        "Population_2025": 1418517
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Cyprus",
+        "Population_2025": 1370754
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Estonia",
+        "Population_2025": 1344232
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Mauritius",
+        "Population_2025": 1268280
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Southern Africa",
+        "Country": "Eswatini",
+        "Population_2025": 1256174
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Djibouti",
+        "Population_2025": 1184076
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Melanesia",
+        "Country": "Fiji",
+        "Population_2025": 933154
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Comoros",
+        "Population_2025": 882847
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Reunion",
+        "Population_2025": 882405
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Melanesia",
+        "Country": "Solomon Islands",
+        "Population_2025": 838645
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Guyana",
+        "Population_2025": 835986
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Southern Asia",
+        "Country": "Bhutan",
+        "Population_2025": 796682
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Eastern Asia",
+        "Country": "Macao",
+        "Population_2025": 722007
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "Luxembourg",
+        "Population_2025": 680453
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "Suriname",
+        "Population_2025": 639850
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Montenegro",
+        "Population_2025": 632729
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Western Sahara",
+        "Population_2025": 600904
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Malta",
+        "Population_2025": 545405
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "Southern Asia",
+        "Country": "Maldives",
+        "Population_2025": 529676
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Cabo Verde",
+        "Population_2025": 527326
+      },
+      {
+        "Continent": "Asia",
+        "Subregion": "South-Eastern Asia",
+        "Country": "Brunei",
+        "Population_2025": 466330
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Central America",
+        "Country": "Belize",
+        "Population_2025": 422924
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Bahamas",
+        "Population_2025": 403033
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Iceland",
+        "Population_2025": 398266
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Guadeloupe",
+        "Population_2025": 373791
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Martinique",
+        "Population_2025": 340439
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Mayotte",
+        "Population_2025": 337011
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Melanesia",
+        "Country": "Vanuatu",
+        "Population_2025": 335169
+      },
+      {
+        "Continent": "America",
+        "Subregion": "South America",
+        "Country": "French Guiana",
+        "Population_2025": 313666
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Melanesia",
+        "Country": "New Caledonia",
+        "Population_2025": 295333
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Barbados",
+        "Population_2025": 282623
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Polynesia",
+        "Country": "French Polynesia",
+        "Population_2025": 282465
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Central Africa",
+        "Country": "Sao Tome & Principe",
+        "Population_2025": 240254
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Polynesia",
+        "Country": "Samoa",
+        "Population_2025": 219306
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Curaçao",
+        "Population_2025": 185487
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Saint Lucia",
+        "Population_2025": 180149
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Micronesia",
+        "Country": "Guam",
+        "Population_2025": 168999
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Micronesia",
+        "Country": "Kiribati",
+        "Population_2025": 136488
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Eastern Africa",
+        "Country": "Seychelles",
+        "Population_2025": 132779
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Grenada",
+        "Population_2025": 117303
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Micronesia",
+        "Country": "Federated States of Micronesia",
+        "Population_2025": 113683
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Aruba",
+        "Population_2025": 108147
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Polynesia",
+        "Country": "Tonga",
+        "Population_2025": 103742
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "St. Vincent & Grenadines",
+        "Population_2025": 99924
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Antigua and Barbuda",
+        "Population_2025": 94209
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "U.S. Virgin Islands",
+        "Population_2025": 84138
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Isle of Man",
+        "Population_2025": 84118
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Andorra",
+        "Population_2025": 82904
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Cayman Islands",
+        "Population_2025": 75844
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Dominica",
+        "Population_2025": 65871
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Northern America",
+        "Country": "Bermuda",
+        "Population_2025": 64555
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Northern Europe",
+        "Country": "Faeroe Islands",
+        "Population_2025": 56002
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Northern America",
+        "Country": "Greenland",
+        "Population_2025": 55745
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Saint Kitts & Nevis",
+        "Population_2025": 46922
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Turks and Caicos",
+        "Population_2025": 46855
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Polynesia",
+        "Country": "American Samoa",
+        "Population_2025": 46029
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Sint Maarten",
+        "Population_2025": 43923
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Micronesia",
+        "Country": "Northern Mariana Islands",
+        "Population_2025": 43541
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "Liechtenstein",
+        "Population_2025": 40128
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Gibraltar",
+        "Population_2025": 40126
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "British Virgin Islands",
+        "Population_2025": 39732
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Western Europe",
+        "Country": "Monaco",
+        "Population_2025": 38341
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Micronesia",
+        "Country": "Marshall Islands",
+        "Population_2025": 36282
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "San Marino",
+        "Population_2025": 33572
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Caribbean Netherlands",
+        "Population_2025": 31338
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Micronesia",
+        "Country": "Palau",
+        "Population_2025": 17663
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Anguilla",
+        "Population_2025": 14728
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Polynesia",
+        "Country": "Cook Islands",
+        "Population_2025": 13263
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Micronesia",
+        "Country": "Nauru",
+        "Population_2025": 12025
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Saint Barthelemy",
+        "Population_2025": 11414
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Polynesia",
+        "Country": "Wallis & Futuna",
+        "Population_2025": 11194
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Polynesia",
+        "Country": "Tuvalu",
+        "Population_2025": 9492
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Northern America",
+        "Country": "Saint Pierre & Miquelon",
+        "Population_2025": 5574
+      },
+      {
+        "Continent": "Africa",
+        "Subregion": "Western Africa",
+        "Country": "Saint Helena",
+        "Population_2025": 5197
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Caribbean",
+        "Country": "Montserrat",
+        "Population_2025": 4359
+      },
+      {
+        "Continent": "America",
+        "Subregion": "Southern America",
+        "Country": "Falkland Islands",
+        "Population_2025": 3469
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Polynesia",
+        "Country": "Tokelau",
+        "Population_2025": 2608
+      },
+      {
+        "Continent": "Oceania",
+        "Subregion": "Polynesia",
+        "Country": "Niue",
+        "Population_2025": 1821
+      },
+      {
+        "Continent": "Europe",
+        "Subregion": "Southern Europe",
+        "Country": "Holy See",
+        "Population_2025": 501
+      }
+    ];
+    const continents = [...new Set(rows.map(r => r.Continent))];
+    const subregions = [...new Set(rows.map(r => r.Subregion))];
+
+    const continentTotals = Object.fromEntries(
+      continents.map(c => [
+        c,
+        rows.filter(r => r.Continent === c).reduce((s, r) => s + r.Population_2025, 0)
+      ])
+    );
+
+    const subregionTotals = Object.fromEntries(
+      subregions.map(s => [
+        s,
+        rows.filter(r => r.Subregion === s).reduce((s2, r) => s2 + r.Population_2025, 0)
+      ])
+    );
+
+    const labels = ["World"];
+    const parents = [""];
+    const values = [0];
+    const subregionMap = new Map();
+
+    for (const c of continents) {
+      labels.push(c);
+      parents.push("World");
+      values.push(continentTotals[c]);
+    }
+
+    for (const s of subregions) {
+      let name = s;
+      if (rows.some(r => r.Country === s)) name += " (subregion)";
+      const cont = rows.find(r => r.Subregion === s)?.Continent || "";
+      labels.push(name);
+      parents.push(cont);
+      values.push(subregionTotals[s]);
+      subregionMap.set(s, name);
+    }
+
+    for (const r of rows) {
+      let name = r.Country;
+      if (subregionMap.has(r.Country)) name += " (country)";
+      labels.push(name);
+      parents.push(subregionMap.get(r.Subregion));
+      values.push(r.Population_2025);
+    }
+
+    values[0] = Object.values(continentTotals).reduce((a, b) => a + b, 0);
+
+    const continentColors = {
+      "Asia": "#E69F00",
+      "Europe": "#56B4E9",
+      "Africa": "#009E73",
+      "America": "#D55E00",
+      "Oceania": "#CC79A7"
+    };
+
+    function adjustColor(hex, factor) {
+      const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16) / 255);
+      const hsl = rgbToHsl(r, g, b);
+      hsl[2] = Math.min(1, Math.max(0, hsl[2] + factor));
+      const [rr, gg, bb] = hslToRgb(...hsl);
+      return `rgb(${Math.round(rr * 255)}, ${Math.round(gg * 255)}, ${Math.round(bb * 255)})`;
+    }
+
+    function rgbToHsl(r, g, b) {
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+      if (max === min) { h = s = 0; }
+      else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      return [h, s, l];
+    }
+
+    function hslToRgb(h, s, l) {
+      let r, g, b;
+      if (s === 0) { r = g = b = l; }
+      else {
+        const hue2rgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1/6) return p + (q - p) * 6 * t;
+          if (t < 1/2) return q;
+          if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+        };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+      }
+      return [r, g, b];
+    }
+
+    const subregionColors = {};
+    for (const cont of continents) {
+      const base = continentColors[cont];
+      const subs = subregions.filter(s => rows.find(r => r.Subregion === s)?.Continent === cont);
+      subs.forEach((s, i) => {
+        subregionColors[s] = adjustColor(base, (i - subs.length / 2) * 0.08);
+      });
+    }
+
+    const colors = ["#BBBBBB"]
+      .concat(continents.map(c => continentColors[c] || "#999999"))
+      .concat(subregions.map(s => subregionColors[s] || "#cccccc"))
+      .concat(rows.map(r => subregionColors[r.Subregion] || continentColors[r.Continent] || "#999999"));
+
+    const data = [{
+      type: "sunburst",
+      labels,
+      parents,
+      values,
+      branchvalues: "total",
+      marker: { colors, line: { width: 0.5, color: "white" } },
+      insidetextorientation: "radial",
+      hovertemplate:
+        "<b>%{label}</b><br>Parent: %{parent}<br>Population: %{value:,}<br>%{percentParent:.2%} of %{parent}<extra></extra>",
+      textinfo: "label+percent parent",
+      textfont: { size: 12, color: "#fff" },
+      maxdepth: 4
+    }];
+
+    const layout = {
+      title: {
+        text: "World Population Sunburst by Continent, Subregion, and Country (2025)",
+        font: { size: 26, family: "Arial, sans-serif" },
+        x: 0.5,
+        xanchor: "center"
+      },
+      font: { family: "Arial, sans-serif", size: 12 },
+      margin: { t: 90, l: 10, r: 10, b: 10 },
+      paper_bgcolor: "#f8f9fa",
+      plot_bgcolor: "#f8f9fa",
+      hoverlabel: { bgcolor: "#f0f0f0", font: { size: 13 } },
+      transition: { duration: 600, easing: "cubic-in-out" }
+    };
+
+    Plotly.newPlot("sunburst", data, layout, { responsive: true, displayModeBar: false });
+  </script>
+</body>
+</html>

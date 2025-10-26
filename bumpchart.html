@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bump Chart – Baby Names (2006–2015)</title>
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <style>
+    body {
+      font-family: "Inter", "Segoe UI", sans-serif;
+      margin: 0;
+      background-color: #fafafa;
+      color: #222;
+    }
+    #chart {
+      width: 100%;
+      height: 95vh;
+    }
+    #back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #333; /* gris neutro oscuro */
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      opacity: 0.9;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: background 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+      z-index: 100;
+    }
+
+    #back-btn:hover {
+      background-color: #222;
+      opacity: 1;
+      transform: scale(1.02);
+    }
+
+    #back-btn:focus {
+      outline: 3px solid #FFD43B;
+      outline-offset: 2px;
+    }
+
+    #back-btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+  <button id="back-btn" onclick="window.location.href='index.html'">← Back to Index</button>
+
+  <div id="chart"></div>
+
+  <script>
+    const data = [{"YearOfBirth":2006,"Name":"Emma","Sex":"F","Number":19107,"Rank":1},{"YearOfBirth":2006,"Name":"Isabella","Sex":"F","Number":18218,"Rank":2},{"YearOfBirth":2006,"Name":"Ava","Sex":"F","Number":16937,"Rank":3},{"YearOfBirth":2006,"Name":"Olivia","Sex":"F","Number":15491,"Rank":4},{"YearOfBirth":2006,"Name":"Sophia","Sex":"F","Number":13496,"Rank":5},{"YearOfBirth":2007,"Name":"Isabella","Sex":"F","Number":19130,"Rank":1},{"YearOfBirth":2007,"Name":"Emma","Sex":"F","Number":18365,"Rank":2},{"YearOfBirth":2007,"Name":"Ava","Sex":"F","Number":18045,"Rank":3},{"YearOfBirth":2007,"Name":"Sophia","Sex":"F","Number":17018,"Rank":4},{"YearOfBirth":2007,"Name":"Olivia","Sex":"F","Number":16573,"Rank":5},{"YearOfBirth":2008,"Name":"Emma","Sex":"F","Number":18803,"Rank":1},{"YearOfBirth":2008,"Name":"Isabella","Sex":"F","Number":18607,"Rank":2},{"YearOfBirth":2008,"Name":"Olivia","Sex":"F","Number":17072,"Rank":3},{"YearOfBirth":2008,"Name":"Ava","Sex":"F","Number":17030,"Rank":4},{"YearOfBirth":2008,"Name":"Sophia","Sex":"F","Number":16075,"Rank":5},{"YearOfBirth":2009,"Name":"Isabella","Sex":"F","Number":22283,"Rank":1},{"YearOfBirth":2009,"Name":"Emma","Sex":"F","Number":17883,"Rank":2},{"YearOfBirth":2009,"Name":"Olivia","Sex":"F","Number":17425,"Rank":3},{"YearOfBirth":2009,"Name":"Sophia","Sex":"F","Number":16929,"Rank":4},{"YearOfBirth":2009,"Name":"Ava","Sex":"F","Number":15863,"Rank":5},{"YearOfBirth":2010,"Name":"Isabella","Sex":"F","Number":22890,"Rank":1},{"YearOfBirth":2010,"Name":"Sophia","Sex":"F","Number":20623,"Rank":2},{"YearOfBirth":2010,"Name":"Emma","Sex":"F","Number":17327,"Rank":3},{"YearOfBirth":2010,"Name":"Olivia","Sex":"F","Number":17017,"Rank":4},{"YearOfBirth":2010,"Name":"Ava","Sex":"F","Number":15421,"Rank":5},{"YearOfBirth":2011,"Name":"Sophia","Sex":"F","Number":21824,"Rank":1},{"YearOfBirth":2011,"Name":"Isabella","Sex":"F","Number":19882,"Rank":2},{"YearOfBirth":2011,"Name":"Emma","Sex":"F","Number":18781,"Rank":3},{"YearOfBirth":2011,"Name":"Olivia","Sex":"F","Number":17305,"Rank":4},{"YearOfBirth":2011,"Name":"Ava","Sex":"F","Number":15485,"Rank":5},{"YearOfBirth":2012,"Name":"Sophia","Sex":"F","Number":22279,"Rank":1},{"YearOfBirth":2012,"Name":"Emma","Sex":"F","Number":20914,"Rank":2},{"YearOfBirth":2012,"Name":"Isabella","Sex":"F","Number":19082,"Rank":3},{"YearOfBirth":2012,"Name":"Olivia","Sex":"F","Number":17296,"Rank":4},{"YearOfBirth":2012,"Name":"Ava","Sex":"F","Number":15518,"Rank":5},{"YearOfBirth":2013,"Name":"Sophia","Sex":"F","Number":21171,"Rank":1},{"YearOfBirth":2013,"Name":"Emma","Sex":"F","Number":20905,"Rank":2},{"YearOfBirth":2013,"Name":"Olivia","Sex":"F","Number":18397,"Rank":3},{"YearOfBirth":2013,"Name":"Isabella","Sex":"F","Number":17599,"Rank":4},{"YearOfBirth":2013,"Name":"Ava","Sex":"F","Number":15225,"Rank":5},{"YearOfBirth":2014,"Name":"Emma","Sex":"F","Number":20886,"Rank":1},{"YearOfBirth":2014,"Name":"Olivia","Sex":"F","Number":19761,"Rank":2},{"YearOfBirth":2014,"Name":"Sophia","Sex":"F","Number":18563,"Rank":3},{"YearOfBirth":2014,"Name":"Isabella","Sex":"F","Number":17027,"Rank":4},{"YearOfBirth":2014,"Name":"Ava","Sex":"F","Number":15660,"Rank":5},{"YearOfBirth":2015,"Name":"Emma","Sex":"F","Number":20355,"Rank":1},{"YearOfBirth":2015,"Name":"Olivia","Sex":"F","Number":19553,"Rank":2},{"YearOfBirth":2015,"Name":"Sophia","Sex":"F","Number":17327,"Rank":3},{"YearOfBirth":2015,"Name":"Ava","Sex":"F","Number":16286,"Rank":4},{"YearOfBirth":2015,"Name":"Isabella","Sex":"F","Number":15504,"Rank":5},{"YearOfBirth":2006,"Name":"Jacob","Sex":"M","Number":24832,"Rank":1},{"YearOfBirth":2006,"Name":"Michael","Sex":"M","Number":22628,"Rank":2},{"YearOfBirth":2006,"Name":"Ethan","Sex":"M","Number":20501,"Rank":3},{"YearOfBirth":2006,"Name":"William","Sex":"M","Number":18946,"Rank":4},{"YearOfBirth":2006,"Name":"Noah","Sex":"M","Number":16324,"Rank":5},{"YearOfBirth":2007,"Name":"Jacob","Sex":"M","Number":24259,"Rank":1},{"YearOfBirth":2007,"Name":"Michael","Sex":"M","Number":21972,"Rank":2},{"YearOfBirth":2007,"Name":"Ethan","Sex":"M","Number":21016,"Rank":3},{"YearOfBirth":2007,"Name":"William","Sex":"M","Number":18876,"Rank":4},{"YearOfBirth":2007,"Name":"Noah","Sex":"M","Number":16585,"Rank":5},{"YearOfBirth":2008,"Name":"Jacob","Sex":"M","Number":22574,"Rank":1},{"YearOfBirth":2008,"Name":"Michael","Sex":"M","Number":20601,"Rank":2},{"YearOfBirth":2008,"Name":"Ethan","Sex":"M","Number":20198,"Rank":3},{"YearOfBirth":2008,"Name":"William","Sex":"M","Number":18383,"Rank":4},{"YearOfBirth":2008,"Name":"Noah","Sex":"M","Number":15778,"Rank":5},{"YearOfBirth":2009,"Name":"Jacob","Sex":"M","Number":21154,"Rank":1},{"YearOfBirth":2009,"Name":"Ethan","Sex":"M","Number":19836,"Rank":2},{"YearOfBirth":2009,"Name":"Michael","Sex":"M","Number":18917,"Rank":3},{"YearOfBirth":2009,"Name":"William","Sex":"M","Number":17905,"Rank":4},{"YearOfBirth":2009,"Name":"Noah","Sex":"M","Number":17231,"Rank":5},{"YearOfBirth":2010,"Name":"Jacob","Sex":"M","Number":22095,"Rank":1},{"YearOfBirth":2010,"Name":"Ethan","Sex":"M","Number":17993,"Rank":2},{"YearOfBirth":2010,"Name":"Michael","Sex":"M","Number":17324,"Rank":3},{"YearOfBirth":2010,"Name":"William","Sex":"M","Number":17036,"Rank":4},{"YearOfBirth":2010,"Name":"Noah","Sex":"M","Number":16438,"Rank":5},{"YearOfBirth":2011,"Name":"Jacob","Sex":"M","Number":20349,"Rank":1},{"YearOfBirth":2011,"Name":"William","Sex":"M","Number":17325,"Rank":2},{"YearOfBirth":2011,"Name":"Noah","Sex":"M","Number":16845,"Rank":3},{"YearOfBirth":2011,"Name":"Michael","Sex":"M","Number":16760,"Rank":4},{"YearOfBirth":2011,"Name":"Ethan","Sex":"M","Number":16674,"Rank":5},{"YearOfBirth":2012,"Name":"Jacob","Sex":"M","Number":19045,"Rank":1},{"YearOfBirth":2012,"Name":"Ethan","Sex":"M","Number":17644,"Rank":2},{"YearOfBirth":2012,"Name":"Noah","Sex":"M","Number":17323,"Rank":3},{"YearOfBirth":2012,"Name":"William","Sex":"M","Number":16856,"Rank":4},{"YearOfBirth":2012,"Name":"Michael","Sex":"M","Number":16124,"Rank":5},{"YearOfBirth":2013,"Name":"Noah","Sex":"M","Number":18206,"Rank":1},{"YearOfBirth":2013,"Name":"Jacob","Sex":"M","Number":18110,"Rank":2},{"YearOfBirth":2013,"Name":"William","Sex":"M","Number":16595,"Rank":3},{"YearOfBirth":2013,"Name":"Ethan","Sex":"M","Number":16216,"Rank":4},{"YearOfBirth":2013,"Name":"Michael","Sex":"M","Number":15453,"Rank":5},{"YearOfBirth":2014,"Name":"Noah","Sex":"M","Number":19229,"Rank":1},{"YearOfBirth":2014,"Name":"Jacob","Sex":"M","Number":16812,"Rank":2},{"YearOfBirth":2014,"Name":"William","Sex":"M","Number":16776,"Rank":3},{"YearOfBirth":2014,"Name":"Ethan","Sex":"M","Number":15691,"Rank":4},{"YearOfBirth":2014,"Name":"Michael","Sex":"M","Number":15400,"Rank":5},{"YearOfBirth":2015,"Name":"Noah","Sex":"M","Number":19511,"Rank":1},{"YearOfBirth":2015,"Name":"Jacob","Sex":"M","Number":15816,"Rank":2},{"YearOfBirth":2015,"Name":"William","Sex":"M","Number":15809,"Rank":3},{"YearOfBirth":2015,"Name":"Ethan","Sex":"M","Number":14991,"Rank":4},{"YearOfBirth":2015,"Name":"Michael","Sex":"M","Number":14321,"Rank":5}];
+
+    const colorPalette = [
+      "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e",
+      "#e6ab02", "#a6761d", "#666666", "#1f78b4", "#33a02c"
+    ];
+
+    const sexData = [...new Set(data.map(d => d.Sex))];
+
+    function createTraces(sex) {
+      const filtered = data.filter(d => d.Sex === sex);
+      const names = [...new Set(filtered.map(d => d.Name))];
+      const traces = [];
+      const annotations = [];
+
+      names.forEach((name, i) => {
+        const subset = filtered.filter(d => d.Name === name);
+        const lastPoint = subset[subset.length - 1];
+
+        traces.push({
+          x: subset.map(d => d.YearOfBirth),
+          y: subset.map(d => d.Rank),
+          mode: "lines+markers",
+          name: name,
+          line: { shape: "spline", width: 3, color: colorPalette[i % colorPalette.length] },
+          marker: { size: 8, color: colorPalette[i % colorPalette.length] },
+          hovertemplate:
+            "<b>%{customdata[0]}</b><br>Year: %{x}<br>Rank: %{y}<br>Births: %{customdata[1]:,}<extra></extra>",
+          customdata: subset.map(d => [d.Name, d.Number])
+        });
+
+        annotations.push({
+          x: lastPoint.YearOfBirth + 0.3,
+          y: lastPoint.Rank,
+          text: name,
+          showarrow: false,
+          font: {
+            color: "white",
+            size: 13,
+            family: "Inter, sans-serif",
+          },
+          align: "left",
+          borderpad: 4,
+          borderwidth: 0,
+          bgcolor: colorPalette[i % colorPalette.length],
+          opacity: 0.95,
+        });
+      });
+
+      return { traces, annotations };
+    }
+
+    const layout = {
+      title: {
+        text: "Evolution of Top 5 US Baby Names (2006-2015)",
+        font: { size: 22 }
+      },
+      xaxis: {
+        title: "Year of Birth",
+        tickmode: "linear",
+        dtick: 1,
+        gridcolor: "#ddd"
+      },
+      yaxis: {
+        title: "Rank (1 = Most Popular)",
+        autorange: "reversed",
+        gridcolor: "#ddd"
+      },
+      hovermode: "closest",
+      plot_bgcolor: "#fafafa",
+      paper_bgcolor: "#fafafa",
+      legend: {
+        orientation: "h",
+        yanchor: "bottom",
+        y: -0.25,
+        xanchor: "center",
+        x: 0.5,
+        font: { size: 12 }
+      },
+      margin: { t: 100, l: 80, r: 150, b: 100 },
+      updatemenus: [
+        {
+          buttons: sexData.map((sex) => ({
+            method: "animate",
+            label: sex === "F" ? "Female" : "Male",
+            args: [
+              [sex],
+              { mode: "immediate", frame: { duration: 600, redraw: true }, transition: { duration: 500 } }
+            ]
+          })),
+          direction: "down",
+          showactive: true,
+          x: 0.5,
+          xanchor: "center",
+          y: 1.04,
+          yanchor: "top"
+        }
+      ]
+    };
+
+    const initialSex = "F";
+    const { traces: initialTraces, annotations: initialAnnotations } = createTraces(initialSex);
+    layout.annotations = initialAnnotations;
+    Plotly.newPlot("chart", initialTraces, layout);
+
+    const frames = sexData.map(sex => {
+      const { traces, annotations } = createTraces(sex);
+      return { name: sex, data: traces, layout: { annotations: annotations } };
+    });
+    Plotly.addFrames("chart", frames);
+  </script>
+</body>
+</html>
