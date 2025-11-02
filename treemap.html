@@ -10,7 +10,7 @@
       position: fixed;
       top: 20px;
       left: 20px;
-      background-color: #333; /* gris neutro oscuro */
+      background-color: #333;
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -1465,7 +1465,6 @@
       .concat(continents.map(c => continentTotals[c]))
       .concat(rows.map(r => r.Population_2025));
 
-    // --- Paleta accesible (Okabe–Ito) ---
     const continentColors = {
       "Asia": "#E69F00",
       "Europe": "#56B4E9",
@@ -1474,11 +1473,10 @@
       "Oceania": "#CC79A7"
     };
 
-    const colors = ["#BBBBBB"] // Root "World"
+    const colors = ["#BBBBBB"]
       .concat(continents.map(c => continentColors[c] || "#999999"))
       .concat(rows.map(r => continentColors[r.Continent] || "#999999"));
 
-    // --- Crear Treemap con algoritmo binary ---
     const data = [{
       type: "treemap",
       labels: labels,
@@ -1500,7 +1498,6 @@
       pathbar: { visible: true }
     }];
 
-    // --- Layout visual ---
     const layout = {
       title: {
         text: "World Population Treemap by Continent and Country (2025)",
