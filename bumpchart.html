@@ -33,18 +33,15 @@
       transition: background 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
       z-index: 100;
     }
-
     #back-btn:hover {
       background-color: #222;
       opacity: 1;
       transform: scale(1.02);
     }
-
     #back-btn:focus {
       outline: 3px solid #FFD43B;
       outline-offset: 2px;
     }
-
     #back-btn:active {
       transform: scale(0.98);
     }
@@ -66,106 +63,122 @@
     const sexData = [...new Set(data.map(d => d.Sex))];
 
     function createTraces(sex) {
-      const filtered = data.filter(d => d.Sex === sex);
-      const names = [...new Set(filtered.map(d => d.Name))];
-      const traces = [];
-      const annotations = [];
+    const filtered = data.filter(d => d.Sex === sex);
+    const names = [...new Set(filtered.map(d => d.Name))];
+    const traces = [];
+    const annotations = [];
 
-      names.forEach((name, i) => {
-        const subset = filtered.filter(d => d.Name === name);
-        const lastPoint = subset[subset.length - 1];
+    names.forEach((name, i) => {
+      const subset = filtered.filter(d => d.Name === name);
+      const lastPoint = subset[subset.length - 1];
 
-        traces.push({
-          x: subset.map(d => d.YearOfBirth),
-          y: subset.map(d => d.Rank),
-          mode: "lines+markers",
-          name: name,
-          line: { shape: "spline", width: 3, color: colorPalette[i % colorPalette.length] },
-          marker: { size: 8, color: colorPalette[i % colorPalette.length] },
-          hovertemplate:
-            "<b>%{customdata[0]}</b><br>Year: %{x}<br>Rank: %{y}<br>Births: %{customdata[1]:,}<extra></extra>",
-          customdata: subset.map(d => [d.Name, d.Number])
-        });
-
-        annotations.push({
-          x: lastPoint.YearOfBirth + 0.3,
-          y: lastPoint.Rank,
-          text: name,
-          showarrow: false,
-          font: {
-            color: "white",
-            size: 13,
-            family: "Inter, sans-serif",
-          },
-          align: "left",
-          borderpad: 4,
-          borderwidth: 0,
-          bgcolor: colorPalette[i % colorPalette.length],
-          opacity: 0.95,
-        });
+      traces.push({
+        x: subset.map(d => d.YearOfBirth),
+        y: subset.map(d => d.Rank),
+        mode: "lines+markers",
+        name: name,
+        line: { shape: "spline", width: 3, color: colorPalette[i % colorPalette.length] },
+        marker: { size: 8, color: colorPalette[i % colorPalette.length] },
+        hovertemplate:
+          "<b>%{customdata[0]}</b><br>Year: %{x}<br>Rank: %{y}<br>Births: %{customdata[1]:,}<extra></extra>",
+        customdata: subset.map(d => [d.Name, d.Number])
       });
 
-      return { traces, annotations };
+      annotations.push({
+        x: lastPoint.YearOfBirth + 0.3,
+        y: lastPoint.Rank,
+        text: name,
+        showarrow: false,
+        font: { color: "white", size: 13, family: "Inter, sans-serif" },
+        align: "left",
+        bgcolor: colorPalette[i % colorPalette.length],
+        opacity: 0.95,
+        borderpad: 4
+      });
+    });
+
+    return { traces, annotations };
+  }
+
+  const layout = {
+    title: { text: "Evolution of Top 5 US Baby Names (2006–2015)", font: { size: 22 } },
+    xaxis: { title: "Year of Birth", tickmode: "linear", dtick: 1, gridcolor: "#ddd" },
+    yaxis: { title: "Rank (1 = Most Popular)", autorange: "reversed", gridcolor: "#ddd" },
+    hovermode: "closest",
+    plot_bgcolor: "#fafafa",
+    paper_bgcolor: "#fafafa",
+    legend: { orientation: "h", yanchor: "bottom", y: -0.25, xanchor: "center", x: 0.5, font: { size: 12 } },
+    margin: { t: 100, l: 80, r: 150, b: 100 },
+    updatemenus: [
+      {
+        buttons: sexData.map((sex) => ({
+          method: "animate",
+          label: sex === "F" ? "Female" : "Male",
+          args: [
+            [sex],
+            { mode: "immediate", frame: { duration: 600, redraw: true }, transition: { duration: 500 } }
+          ]
+        })),
+        direction: "down",
+        showactive: true,
+        x: 0.5,
+        xanchor: "center",
+        y: 1.04,
+        yanchor: "top"
+      }
+    ]
+  };
+
+  const initialSex = "F";
+  const { traces: initialTraces, annotations: initialAnnotations } = createTraces(initialSex);
+  layout.annotations = initialAnnotations;
+  Plotly.newPlot("chart", initialTraces, layout);
+
+  const frames = sexData.map(sex => {
+    const { traces, annotations } = createTraces(sex);
+    return { name: sex, data: traces, layout: { annotations: annotations } };
+  });
+  Plotly.addFrames("chart", frames);
+
+  const chartDiv = document.getElementById("chart");
+  let highlighted = new Set();
+
+  function updateHighlight() {
+    const newData = chartDiv.data.map(trace => {
+      const isHighlighted = highlighted.has(trace.name);
+      return {
+        ...trace,
+        line: {
+          ...trace.line,
+          width: isHighlighted ? 5 : 0.8,
+          opacity: isHighlighted ? 1 : 0.2
+        },
+        marker: {
+          ...trace.marker,
+          opacity: isHighlighted ? 1 : 0.2
+        }
+      };
+    });
+    Plotly.react("chart", newData, chartDiv.layout);
+  }
+
+  chartDiv.on("plotly_click", (ev) => {
+    if (!ev.points || !ev.points.length) return;
+    const clickedName = ev.points[0].data.name;
+
+    if (highlighted.has(clickedName)) {
+      highlighted.delete(clickedName);
+    } else {
+      highlighted.add(clickedName);
     }
 
-    const layout = {
-      title: {
-        text: "Evolution of Top 5 US Baby Names (2006-2015)",
-        font: { size: 22 }
-      },
-      xaxis: {
-        title: "Year of Birth",
-        tickmode: "linear",
-        dtick: 1,
-        gridcolor: "#ddd"
-      },
-      yaxis: {
-        title: "Rank (1 = Most Popular)",
-        autorange: "reversed",
-        gridcolor: "#ddd"
-      },
-      hovermode: "closest",
-      plot_bgcolor: "#fafafa",
-      paper_bgcolor: "#fafafa",
-      legend: {
-        orientation: "h",
-        yanchor: "bottom",
-        y: -0.25,
-        xanchor: "center",
-        x: 0.5,
-        font: { size: 12 }
-      },
-      margin: { t: 100, l: 80, r: 150, b: 100 },
-      updatemenus: [
-        {
-          buttons: sexData.map((sex) => ({
-            method: "animate",
-            label: sex === "F" ? "Female" : "Male",
-            args: [
-              [sex],
-              { mode: "immediate", frame: { duration: 600, redraw: true }, transition: { duration: 500 } }
-            ]
-          })),
-          direction: "down",
-          showactive: true,
-          x: 0.5,
-          xanchor: "center",
-          y: 1.04,
-          yanchor: "top"
-        }
-      ]
-    };
+    updateHighlight();
+  });
 
-    const initialSex = "F";
-    const { traces: initialTraces, annotations: initialAnnotations } = createTraces(initialSex);
-    layout.annotations = initialAnnotations;
-    Plotly.newPlot("chart", initialTraces, layout);
-
-    const frames = sexData.map(sex => {
-      const { traces, annotations } = createTraces(sex);
-      return { name: sex, data: traces, layout: { annotations: annotations } };
-    });
-    Plotly.addFrames("chart", frames);
+  chartDiv.on("plotly_animated", () => {
+    highlighted.clear();
+    updateHighlight();
+  });
   </script>
 </body>
 </html>
